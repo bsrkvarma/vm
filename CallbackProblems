@@ -1,0 +1,45 @@
+    class Program
+    {
+        private static string _data;
+        static bool _reading = true;
+        static void Main(string[] args)
+        {
+            string data = null;
+            Task.Run(() =>
+            {
+                DoWork(CallBack);
+                _reading = false;
+            });
+            while (_reading && _data == null)
+            {
+                Thread.Sleep(10);
+            }
+
+            if (_data != null)
+            {
+                data = _data;
+                _data = null;
+            }
+
+            Console.WriteLine(data);
+
+            Console.WriteLine("Completed work");
+        }
+
+        static bool CallBack(string results)
+        {
+            Console.WriteLine(results);
+            return true;
+        }
+
+        static bool DoWork(Func<string, bool> callback)
+        {
+            Console.WriteLine("startedWork");
+            for (var i = 0; i <= 10; i++)
+            {
+                Thread.Sleep(100);
+                callback($"data{i}");
+            }
+            return true;
+        }
+    }
