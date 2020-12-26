@@ -1,15 +1,30 @@
     class Program
     {
         private static string _data;
+        private static Queue<string> _buffer;
+
         static bool _reading = true;
         static void Main(string[] args)
         {
-            string data = null;
-            Task.Run(() =>
+            for (var i = 0; i <= 10; i++)
             {
-                DoWork(CallBack);
-                _reading = false;
-            });
+                var res = PerformTask();
+                Console.WriteLine(res);
+            }
+            Console.WriteLine("Completed work");
+        }
+
+        static string PerformTask()
+        {
+            if (_buffer == null)
+            {
+                _buffer = new Queue<string>();
+                Task.Run(() =>
+                {
+                    DoWork(CallBack);
+                    _reading = false;
+                });
+            }
             while (_reading && _data == null)
             {
                 Thread.Sleep(10);
@@ -17,18 +32,16 @@
 
             if (_data != null)
             {
-                data = _data;
+                _buffer.Enqueue(_data);
                 _data = null;
             }
-
-            Console.WriteLine(data);
-
-            Console.WriteLine("Completed work");
+            return _buffer.Dequeue(); 
         }
 
         static bool CallBack(string results)
         {
-            Console.WriteLine(results);
+            _data = results;
+            //Console.WriteLine(results);
             return true;
         }
 
