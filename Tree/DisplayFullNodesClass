@@ -1,0 +1,20 @@
+  class DisplayFullNodesClass
+    {
+        //FullNodes are nodes which has both left and right nodes.
+        public void DisplayFullNodes(TreeNode root)
+        {
+            Console.WriteLine("**FullNodes**");
+            DisplayFnRecursively(root);
+        }
+
+        void DisplayFnRecursively(TreeNode node)
+        {
+            if (node != null)
+            {
+                if (node?.left != null && node?.right != null)
+                    Console.WriteLine(node.val);
+                DisplayFnRecursively(node?.left);
+                DisplayFnRecursively(node?.right);
+            }
+        }
+    }
