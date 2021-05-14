@@ -1,0 +1,56 @@
+class ContiguousSubArrays
+    {
+        public static int[] CountSubarrays(int[] arr)
+        {
+            // Write your code 
+            if (arr.Length == 1)
+                return new[] { 1 };
+            var res = new int[arr.Length];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                res[i] = 1;
+                res[i] += getContiguousSubAtrraysBackWard(arr, i);
+                res[i] += getContiguousSubAtrraysForeWard(arr, i);
+            }
+            return res;
+        }
+
+        static int getContiguousSubAtrraysBackWard(int[] arr, int index)
+        {
+            var res = 0;
+            var i = index - 1;
+
+            while (i >= 0)
+            {
+                if (arr[index] > arr[i])
+                {
+                    res++;
+                    i--;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return res;
+        }
+
+        static int getContiguousSubAtrraysForeWard(int[] arr, int index)
+        {
+            var res = 0;
+            var i = index + 1;
+            while (i < arr.Length)
+            {
+                if (arr[index] > arr[i])
+                {
+                    res++;
+                    i++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return res;
+        }
+    }
