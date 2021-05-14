@@ -1,0 +1,123 @@
+   class DisplayZigZagClass
+    {
+        public static void DisplayZigZag(TreeNode root)
+        {
+            Console.WriteLine("Display tree data in zigzag..");
+            var currentLevel = new Stack<TreeNode>();
+            var nextLevel = new Stack<TreeNode>();
+            currentLevel.Push(root);
+            var isLeftToRight = true;
+            while (currentLevel.Count > 0)
+            {
+                var node = currentLevel.Pop();
+                Console.Write($" {node.val}");
+                if (isLeftToRight)
+                {
+                    if (node.left != null)
+                        nextLevel.Push(node.left);
+                    if (node.right != null)
+                        nextLevel.Push(node.right);
+                }
+                else
+                {
+                    if (node.right != null)
+                        nextLevel.Push(node.right);
+                    if (node.left != null)
+                        nextLevel.Push(node.left);
+                }
+
+                if (currentLevel.Count == 0)
+                {
+                    Console.WriteLine();
+                    isLeftToRight = !isLeftToRight;
+                    var temp = nextLevel;
+                    currentLevel = temp;
+                    nextLevel = new Stack<TreeNode>();
+                }
+            }
+        }
+
+        public IList<IList<int>> DisplayZigZag2(TreeNode root)
+        {
+            Console.WriteLine("Display tree data in zigzag..");
+            var res = new List<IList<int>>();
+            var tempres = new List<int>();
+            var currentLevel = new Stack<TreeNode>();
+            var nextLevel = new Stack<TreeNode>();
+            currentLevel.Push(root);
+            var isLeftToRight = true;
+            while (currentLevel.Count > 0)
+            {
+                var node = currentLevel.Pop();
+                Console.Write($" {node.val}");
+                tempres.Add(node.val);
+
+                if (isLeftToRight)
+                {
+                    if (node.left != null)
+                        nextLevel.Push(node.left);
+                    if (node.right != null)
+                        nextLevel.Push(node.right);
+                }
+                else
+                {
+                    if (node.right != null)
+                        nextLevel.Push(node.right);
+                    if (node.left != null)
+                        nextLevel.Push(node.left);
+                }
+
+                if (currentLevel.Count == 0)
+                {
+                    Console.WriteLine();
+                    isLeftToRight = !isLeftToRight;
+                    res.Add(tempres);
+                    tempres = new List<int>();
+                    var temp = nextLevel;
+                    currentLevel = temp;
+                    nextLevel = new Stack<TreeNode>();
+                }
+            }
+            return res;
+        }
+
+        public IList<IList<int>> DisplayZigZag3(TreeNode root)
+        {
+            Console.WriteLine("Display tree data in zigzag..");
+            var result = new List<IList<int>>();
+            var isLeftToRight = true;
+            var queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+
+            while (queue.Count > 0)
+            {
+                int levelSize = queue.Count;
+                // important to use LinkedList as we want to support both normal and reverse ordering
+                var level = new LinkedList<int>();
+                for (int i = 0; i < levelSize; i++)
+                {
+                    var node = queue.Dequeue();
+                    if (isLeftToRight)
+                    {
+                        level.AddFirst(node.val);
+                    }
+                    else
+                    {
+                        level.AddLast(node.val);
+                    }
+
+                    if (node.left != null)
+                    {
+                        queue.Enqueue(node.left);
+                    }
+                    if (node.right != null)
+                    {
+                        queue.Enqueue(node.right);
+                    }
+                }
+                result.Add(level.ToArray());
+                isLeftToRight = !isLeftToRight;
+            }
+            return result;
+        }
+    }
