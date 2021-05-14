@@ -1,0 +1,30 @@
+    class Find_Largest_Value_in_Each_Tree_Row
+    {
+        public IList<int> LargestValues(TreeNode root)
+        {
+            var res = new List<int>();
+            if (root == null)
+                return res;
+            var queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+
+            while (queue.Count > 0)
+            {
+                var maxValue = int.MinValue;
+                var size = queue.Count;
+                while (size > 0)
+                {
+                    var node = queue.Dequeue();
+                    if (node.left != null)
+                        queue.Enqueue(node.left);
+                    if (node.right != null)
+                        queue.Enqueue(node.right);
+                    if (node.val > maxValue)
+                        maxValue = node.val;
+                    size--;
+                }
+                res.Add(maxValue);
+            }
+            return res;
+        }
+    }
