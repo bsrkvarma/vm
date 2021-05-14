@@ -1,0 +1,53 @@
+  public class ValidPalindromeString
+    {
+        public bool IsPalindrome(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+                return true;
+            var left = 0;
+            var right = s.Length - 1;
+            while (left <= right)
+            {
+                while(left < right && !Char.IsLetterOrDigit(s[left]))
+                {
+                    left++;
+                }
+
+                while(left < right && !Char.IsLetterOrDigit(s[right]))
+                {
+                    right--;
+                }
+
+                if (Char.ToLower(s[left]) != Char.ToLower(s[right]))
+                    return false;
+            }
+            return true;
+        }
+
+        static int getnextCharacterIndex(string s, int i)
+        {
+            if (s.Length < i)
+                return -1;
+            if (isCharacter(s[i]))
+                return i;
+            else
+                return getnextCharacterIndex(s, i + 1);
+        }
+
+        static int getPrevCharacterIndex(string s, int i)
+        {
+            if (i < 0)
+                return -1;
+            if (isCharacter(s[i]))
+                return i;
+            else
+                return getPrevCharacterIndex(s, i - 1);
+        }
+
+        static bool isCharacter(char c)
+        {
+            var res = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+            Console.WriteLine(res.ToString());
+            return res;
+        }
+    }
