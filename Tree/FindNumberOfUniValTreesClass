@@ -1,0 +1,27 @@
+  class FindNumberOfUniValTreesClass
+    {
+        public static int FindNumberOfUniValTrees(TreeNode node)
+        {
+            if (node == null)
+                return 0;
+            return FindNumberOfUniValTreesRecursively(node);
+        }
+
+        private static int FindNumberOfUniValTreesRecursively(TreeNode node)
+        {
+            var res = 0;
+            if (node != null)
+            {
+                if (node.left != null)
+                    res += FindNumberOfUniValTreesRecursively(node.left);
+                if (node.right != null)
+                    res += FindNumberOfUniValTreesRecursively(node.right);
+
+                if (node.left?.val == node.right?.val && node.right?.val == node.val)
+                    res++;
+                if (node.left == null && node.right == null)
+                    res++;
+            }
+            return res;
+        }
+    }
