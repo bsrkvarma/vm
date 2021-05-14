@@ -1,0 +1,18 @@
+public class CustomSortString
+    {
+        public static string Test(string S, string T)
+        {
+            var res = new char[S.Length + T.Length];
+            var extraString = "";
+            for (int i = 0; i < T.Length; i++)
+            {
+                if (S.IndexOf(T[i]) != -1)
+                {
+                    res[S.IndexOf(T[i])] = T[i];
+                    continue;
+                }
+                extraString += T[i];
+            }
+            return res + extraString;
+        }
+    }
