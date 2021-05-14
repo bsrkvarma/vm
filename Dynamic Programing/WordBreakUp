@@ -1,0 +1,98 @@
+
+    class WordBreakUp
+    {
+        //For recursive problems, branching out to all possible solutions, the TC=> O(2^n)
+        //If we use cache, the TC=> O(n^3) (n2 for the recursive calls, and n for substring method)
+        public static bool WordBreak(string s, IList<string> wordDict)
+        {
+            var cache = new bool?[s.Length];
+            return recursiveBreak(s, wordDict, cache, 0);
+        }
+
+        static bool recursiveBreak(string s, IList<string> wordDict, bool?[] cache, int start)
+        {
+            if (start == s.Length)
+            {
+                return true;
+            }
+            if (cache[start].HasValue)
+                return cache[start].Value;
+
+            for (int end = start + 1; end <= s.Length; end++)
+            {
+                if (wordDict.Contains(s.Substring(start, end - start)) && recursiveBreak(s, wordDict, cache, end))
+                {
+                    cache[start] = true;
+                    return true;
+                }
+            }
+            cache[start] = false;
+            return false;
+        }
+
+        // returns true if the word can be segmented into parts such
+        // that each part is contained in dictionary
+        public static bool Test(string s, string[] dictionary)
+        {
+            int n = s.Length;
+            var maxLength = dictionary.Max(x => s.Length);
+
+            //This results array is used to mark the indexes in the string, which can be segmented.
+            var results = new bool[n + 1]; //dp array
+            results[0] = true; //base is always true
+            //Loop through the string for string length + 1 times and mark the result array when ever the index can be segmented
+            //when ever we can make use of the word in the dictionary for the string formed using the two pointers.
+            // for AAAAA ["AA","AAA"]
+            //    012345
+            // I can mark 2,3, 5 to true as these can be segmented successfully. 
+            //If the last index is marked as true, which means my string can be segmented successfully.
+            for (int len = 0; len < n+1; len++)
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    if (len - i > maxLength) 
+                        continue;
+                    //Check results[i] because the string before the current substring is successfully segmented.
+                    if (results[i] && dictionary.Contains(s.Substring(i, len - i)))
+                    {
+                        results[len] = true;
+                        break;
+                    }
+                }
+            }
+            return results[n];
+        }
+
+        static Dictionary<string, bool> memDictionary = new Dictionary<string, bool>();
+        // returns true if the word can be segmented into parts such
+        // that each part is contained in dictionary
+        public static bool wordBreak(string word, string[] dictionary)
+        {
+            int size = word.Length;
+
+            // base case
+            if (size == 0)
+                return true;
+            if (memDictionary.ContainsKey(word))
+                return memDictionary[word];
+
+            //else check for all words
+            for (int i = 1; i <= size; i++)
+            {
+                // Now we will first divide the word into two parts ,
+                // the prefix will have a length of i and check if it is
+                // present in dictionary ,if yes then we will check for
+                // suffix of length size-i recursively. if both prefix and
+                // suffix are present the word is found in dictionary.
+
+                if (dictionary.Contains(word.Substring(0, i)) &&
+                    wordBreak(word.Substring(i), dictionary))
+                    memDictionary[word] = true;
+                return true;
+            }
+
+            // if all cases failed then return false
+            memDictionary[word] = false;
+            return false;
+        }
+    }
