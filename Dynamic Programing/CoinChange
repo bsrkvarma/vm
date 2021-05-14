@@ -1,0 +1,49 @@
+  internal static class CoinChange
+    {
+        public static void Test()
+        {
+            var amount = 30;
+            var coins = new[] { 25, 10,  1 };
+            Console.WriteLine(FindMinimumCoins(amount, coins));
+            Console.WriteLine(CoinChangeMyOwn.Total(amount, coins));
+        }
+
+        private static int FindMinimumCoins(int amount, int[] coins)
+        {
+            var res = Enumerable.Repeat(amount, amount + 1).ToArray();
+            res[0] = 0;
+            for (int i = 1; i <= amount; i++)
+            {
+                foreach (var coin in coins)
+                {
+                    if (i>=coin)
+                    {
+                        res[i] = Math.Min(res[i], 1 + res[i - coin]);
+                    }
+                }
+            }
+            return res[amount];
+        }
+    }
+
+    public static class CoinChangeMyOwn
+    {
+        public static int Total(int amount, int[] denominations)
+        {
+            var values = new int[amount+1];
+            values[0] = 0;
+            for (var value = 1; value <= amount; value++)
+            {
+                values[value] = int.MaxValue;
+                foreach (var denomination in denominations)
+                {
+                    if (denomination <= value)
+                    {
+                        values[value] = Math.Min(values[value], 1 + values[value - denomination]);
+                    }
+                }
+            }
+            return values[amount];
+        }
+
+    }
