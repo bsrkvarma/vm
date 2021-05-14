@@ -1,0 +1,74 @@
+    class MaximumProductSubarray
+    {
+        //3,6,-3,2,-5,0=> 540
+        public static int MaximumProductSubarrayTest(int[] nums)
+        {
+            var max = nums[0];
+            var min = nums[0];
+            var res = max;
+            for (var i = 1; i < nums.Length; i++)
+            {
+                var tempMax = Math.Max(nums[i], Math.Max(min* nums[i] , max * nums[i]));
+                min = Math.Min(nums[i], Math.Min(min * nums[i], max* nums[i]));
+                max = tempMax;
+                res = Math.Max(max, res);
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Uses Kadane's algorithm, first product from right and then product from left and get the max.
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int MaxProduct2(int[] nums)
+        {
+            var max = int.MinValue;
+            var product = 1;
+            foreach (var num in nums)
+            {
+                product *= num;
+                max = Math.Max(product, max);
+                if (product == 0) product = 1;
+            }
+
+            product = 1;
+            for (var i = nums.Length - 1; i >= 0; i--)
+            {
+                product *= nums[i];
+                max = Math.Max(product, max);
+                if (product == 0) product = 1;
+            }
+            return max;
+        }
+
+        private static int numberOfWays(int[] arr, int k)
+        {
+            // Write your code here
+            var list = new List<int>();
+            var res = 0;
+            foreach (int i in arr)
+            {
+                res += list.Where(e => e == k - i).Count();
+                list.Add(i);
+            }
+            return res;
+        }
+        public int MaxProductOptimized(int[] nums)
+        {
+            var max = int.MinValue;
+            var product = 1;
+            var ProductFromRight = 1;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                product = product * nums[i];
+                max = Math.Max(product, max);
+                if (product == 0) product = 1;
+
+                ProductFromRight = ProductFromRight * nums[nums.Length - i - 1];
+                max = Math.Max(ProductFromRight, max);
+                if (ProductFromRight == 0) ProductFromRight = 1;
+            }
+            return max;
+        }
+    }
