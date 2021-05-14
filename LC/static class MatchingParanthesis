@@ -1,0 +1,32 @@
+ static class MatchingParanthesis
+    {
+        public static bool IsValid(string s)
+        {
+            if (s.ToCharArray().Length % 2 != 0)
+                return false;
+            var history = new Stack<char>();
+            var res = false;
+            foreach (var character in s)
+            {
+                if (character == '}' || character == ']' || character == ')')
+                {
+                    if (history.Count > 0 && new[] { 1, 2 }.Contains(character - history.Pop()))
+                    {
+                        res = true;
+                        continue;
+                    }
+                    else
+                    {
+                        res = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    history.Push(character);
+                }
+            }
+            return history.Count > 0 ? false : res;
+
+        }
+    }
