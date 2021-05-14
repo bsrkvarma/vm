@@ -1,0 +1,30 @@
+  class RotationalCipher
+    {
+        public static string RotationalCipherTest(String input, int rotationFactor)
+        {
+            var res = new StringBuilder();
+            foreach (var character in input)
+            {
+                if (char.IsUpper(character))
+                {
+                    var r = (char)('A' + (character - 'A' + rotationFactor) % 26);
+                    res.Append(r);
+                }
+                else if (char.IsLower(character))
+                {
+                    var r = (char)('a' + (character - 'a' + rotationFactor) % 26);
+                    res.Append(r);
+                }
+                else if (char.IsDigit(character))
+                {
+                    var r = ((Convert.ToInt32(character.ToString()) + rotationFactor) % 10);
+                    res.Append(r);
+                }
+                else
+                {
+                    res.Append(character);
+                }
+            }
+            return res.ToString();
+        }
+    }
