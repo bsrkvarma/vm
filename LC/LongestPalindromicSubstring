@@ -1,0 +1,68 @@
+ static class LongestPalindromicSubstring
+    {
+
+        //This tries to get the result by starting from the middle of the string
+        //We need to search for both i and i+1 as our 
+        public static string LongestPalindrome2(string s)
+        {
+
+            if (string.IsNullOrEmpty(s) || s.Length == 1)
+                return s;
+            var maxPolyndrome = "";
+            for (var i = 0; i < s.Length; i++)
+            {
+                var res = "";
+                if (s.Length % 2 != 0)
+                    res = SearchFromMiddle(s, i, i);
+                else
+                    res = SearchFromMiddle(s, i, i + 1);
+                //var res = res1.Length> res2.Length? res1: res2;
+                maxPolyndrome = res.Length > maxPolyndrome.Length ? res : maxPolyndrome;
+            }
+            return maxPolyndrome;
+        }
+
+        public static string SearchFromMiddle(string s, int left, int right)
+        {
+            while (left <= right && left >= 0 && right < s.Length && s[left] == s[right])
+            {
+                left--; right++;
+            }
+            return s.Substring(left + 1, right - left - 1);
+        }
+
+        public static string LongestPalindrome(string s)
+        {
+            var maxPalindrome = "";
+            for (var left = 0; left < s.Length; left++)
+            {
+                for (var right = s.Length - 1; right >= 0; right--)
+                {
+                    if (left < right && s[left] == s[right])
+                    {
+                        Console.WriteLine(left + right);
+                        var p = getPalindrome(s, left, right);
+                        if (p.Length > maxPalindrome.Length)
+                            maxPalindrome = p;
+                    }
+                }
+            }
+            Console.WriteLine("---");
+            return maxPalindrome;
+        }
+
+        public static string getPalindrome(string s, int left, int right)
+        {
+            var res = s.Substring(left, right - left + 1);
+            while (left < right)
+            {
+                if (s[left] == s[right])
+                {
+                    left++; right--;
+                }
+                else
+                    return "";
+            }
+            return res;
+        }
+    }
