@@ -1,0 +1,68 @@
+ class TaskScheduler
+    {
+        public int LeastInterval(char[] tasks, int n)
+        {
+            //Group the tasks by frequency
+            var tasksByOccurances = new Dictionary<char, int>();
+            var schedule = new List<char>();
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                if (!tasksByOccurances.ContainsKey(tasks[i]))
+                    tasksByOccurances.Add(tasks[i], 0);
+                tasksByOccurances[tasks[i]]++;
+            }
+
+            while (tasksByOccurances.Count > 0)
+            {
+                var cycles = 0;
+                foreach (var task in tasksByOccurances.OrderByDescending(k => k.Value))
+                {
+                    schedule.Add(task.Key);
+                    if (task.Value > 1)
+                        tasksByOccurances[task.Key]--;
+                    else
+                        tasksByOccurances.Remove(task.Key);
+                    cycles = cycles + 1;
+                    if (cycles > n)
+                        break;
+                }
+                if (cycles < n + 1 && tasksByOccurances.Count > 0)
+                {
+                    for (int i = 0; i <= n - cycles; i++)
+                        schedule.Add(Char.MinValue);
+                }
+            }
+            //       Console.WriteLine(string.Join(",",schedule));
+            return schedule.Count();
+        }
+
+
+        public static int LeastInterval2(char[] tasks, int n)
+        {
+            var tasksByFrequency = new Dictionary<int, int>();
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                if (!tasksByFrequency.ContainsKey(tasks[i]))
+                    tasksByFrequency.Add(tasks[i], 0);
+                tasksByFrequency[tasks[i]]++;
+            }
+            var tasksByFrequencyOrdered = tasksByFrequency.OrderByDescending(k => k.Value).ToList();
+
+            var maxFrequency = tasksByFrequencyOrdered.First().Value;
+            var maxIdleTime = (maxFrequency - 1) * n;
+            tasksByFrequencyOrdered.Remove(tasksByFrequencyOrdered.First());
+            //AAABBB
+            //A  A  A =4
+            //AB AB AB = 
+            foreach (var item in tasksByFrequencyOrdered)
+            {
+                if (maxIdleTime > 0)
+                {
+                    maxIdleTime -= Math.Min(maxFrequency - 1, item.Value);
+                }
+            }
+            maxIdleTime = Math.Max(0, maxIdleTime);
+            return tasks.Length + maxIdleTime;
+        }
+
+    }
