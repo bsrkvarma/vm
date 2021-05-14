@@ -1,0 +1,145 @@
+class All_Nodes_Distance_K_in_Binary_Tree
+    {
+        static List<int> res = new List<int>();
+        //O(N) time and space complexity
+        #region Method1 using recursion
+        public static IList<int> DistanceK(TreeNode root, int target, int k)
+        {
+            search(root, target, k);
+            return res;
+        }
+
+        static int search(TreeNode node, int target, int k)
+        {
+            if (node == null)
+                return -1;
+            if (node.val == target)
+            {
+                FindElelmentsAtKDistance(node, k, 0);
+                return 1;
+            }
+            else
+            {
+                var l = search(node.left, target, k);
+                if (l != -1)
+                {
+                    if (l == k)
+                    {
+                        res.Add(node.val);
+                    }
+                    else
+                    {
+                        FindElelmentsAtKDistance(node.right, k, l + 1);
+                    }
+                    return l + 1;
+                }
+                var r = search(node.right, target, k);
+                if (r != -1)
+                {
+                    if (r == k)
+                    {
+                        res.Add(node.val);
+                    }
+                    else
+                    {
+                        FindElelmentsAtKDistance(node.left, k, r + 1);
+                    }
+                    return r + 1;
+                }
+            }
+            return -1;
+        }
+
+        static void FindElelmentsAtKDistance(TreeNode node, int k, int currentDistance)
+        {
+            if (node == null)
+                return;
+
+            if (currentDistance != k)
+            {
+                FindElelmentsAtKDistance(node.left, k, currentDistance + 1);
+                FindElelmentsAtKDistance(node.right, k, currentDistance + 1);
+            }
+            else
+            {
+                res.Add(node.val);
+            }
+        }
+        #endregion
+
+        #region Method2 uses the Graph
+
+        public static IList<int> DistanceK(TreeNode root, TreeNode target, int k)
+        {
+            var res = new List<int>();
+            if (root == null || target == null)
+                return res;
+            var graph1 = treeToGraph(root);
+            var visited = new HashSet<TreeNode>();
+            var queue = new Queue<TreeNode>();
+            var distance = 0;
+            queue.Enqueue(target);
+            while (queue.Count > 0 && distance <= k)
+            {
+                var size = queue.Count();
+                while (size > 0)
+                {
+                    var node = queue.Dequeue();
+                    if (!visited.Contains(node))
+                    {
+                        visited.Add(node);
+                        if (distance == k)
+                            res.Add(node.val);
+                        else
+                        {
+                            foreach (var n in graph1[node])
+                            {
+                                queue.Enqueue(n);
+                            }
+                        }
+                    }
+
+                    size--;
+                }
+                distance++;
+            }
+            return res;
+        }
+        public static Dictionary<TreeNode, List<TreeNode>> treeToGraph(TreeNode root)
+        {
+            var res = new Dictionary<TreeNode, List<TreeNode>>();
+            var queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+            while (queue.Count > 0)
+            {
+                var node = queue.Dequeue();
+                if (!res.ContainsKey(node))
+                {
+                    res[node] = new List<TreeNode>();
+                }
+                if (node.left != null)
+                {
+                    if (!res.ContainsKey(node.left))
+                    {
+                        res[node.left] = new List<TreeNode>();
+                    }
+                    res[node].Add(node.left);
+                    res[node.left].Add(node);
+                    queue.Enqueue(node.left);
+                }
+                if (node.right != null)
+                {
+                    if (!res.ContainsKey(node.right))
+                    {
+                        res[node.right] = new List<TreeNode>();
+                    }
+                    res[node].Add(node.right);
+                    res[node.right].Add(node);
+                    queue.Enqueue(node.right);
+                }
+            }
+            return res;
+        }
+        #endregion
+
+    }
