@@ -1,0 +1,27 @@
+  class PartitionArray
+    {
+        public static bool CanPartition(int[] nums)
+        {
+            var total = nums.Sum();
+            if (total % 2 != 0)
+                return false;
+            var dict= new Dictionary<string, bool>();
+            return CanPartition(nums, 0, 0, total, dict);
+        }
+
+        public static bool CanPartition(int[] nums, int index, int currentSum, int total, Dictionary<string, bool> dict)
+        {
+            var key = $"{index}- {currentSum}";
+            if (dict.ContainsKey(key))
+                return dict[key];
+            if (currentSum * 2 == total)
+                return true;
+            if (currentSum * 2 > total || index >= nums.Length)
+                return false;
+            var withOutUsingNumber = CanPartition(nums, index + 1, currentSum, total,dict);
+            var withUsingNumber = CanPartition(nums, index + 1, currentSum + nums[index], total, dict);
+            var res =withUsingNumber || withOutUsingNumber;
+            dict.Add(key, res);
+            return res;
+        }
+    }
