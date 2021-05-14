@@ -1,0 +1,100 @@
+ class CLengthOfLongestSubstring
+    {
+        public static int LengthOfLongestSubstringKDistinct(string s, int k)
+        {
+            if (s.Length * k == 0)
+                return 0;
+            var dict = new Dictionary<int, int>();
+            var low = 0; var high = 0;
+            var max = 1;
+            while (high < s.Length)
+            {
+                if (!dict.ContainsKey(s[high]))
+                {
+                    if (dict.Count < k)
+                    {
+                        dict.Add(s[high], 1);
+                        high++;
+                        max = Math.Max(max, dict.Sum(x => x.Value));
+                    }
+                    else
+                    {
+                        if (dict[s[low]] > 1)
+                            dict[s[low]]--;
+                        else
+                            dict.Remove(s[low]);
+                        low++;
+                    }
+                }
+                else
+                {
+                    dict[s[high]]++;
+                    high++;
+                    max = Math.Max(max, dict.Sum(x => x.Value));
+                }
+            }
+            return max;
+        }
+
+
+        public static int LengthOfLongestSubstring2(string s)
+        {
+            var dict = new HashSet<int>();
+            var res = 0;
+            var start = 0;
+            var end = 0;
+            while (end < s.Length)
+            {
+                if (!dict.Contains(s[end]))
+                {
+                    dict.Add(s[end]);
+                    end++;
+                    res = Math.Max(res, dict.Count);
+                }
+                else
+                {
+                    dict.Remove(s[start]);
+                    start++;
+                }
+            }
+            return res;
+        }
+
+        public static int LengthOfLongestSubstring(string s)
+        {
+            var largest = "";
+            for (int i = 0; i < s.Length; i++)
+            {
+                for (int j = i; j < s.Length; j++)
+                {
+                    var res = CheckUnique(s, i, j);
+                    if (res.Length > largest.Length)
+                    {
+                        largest = res;
+                        Console.WriteLine(res);
+                        // if(largest.Length == s.Length)
+                        //  return s.Length;
+                    }
+                }
+            }
+            return largest.Length;
+        }
+
+        static string CheckUnique(string s, int start, int end)
+        {
+            var tempres = s.Substring(start, end - start + 1);
+            var res = new int[128];
+            while (start < end)
+            {
+                var c = s[start];
+                res[c]++;
+                if (res[c] <= 1)
+                {
+                    start++;
+                }
+                else
+                    return "";
+            }
+            return tempres;
+        }
+    }
