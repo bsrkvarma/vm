@@ -1,0 +1,65 @@
+ public class Island
+    {
+        #region Number of max islands
+        //Time -O(M x N)
+        //Space  - O(M x N)
+        public int NumIslands(char[][] grid)
+        {
+            var res = 0;
+            for (int i = 0; i < grid.Length; i++)
+            {
+                for (int j = 0; j < grid[i].Length; j++)
+                {
+                    if (IsthisIsland(grid, i, j))
+                        res++;
+                }
+            }
+            return res;
+        }
+
+        bool IsthisIsland(char[][] grid, int i, int j)
+        {
+            if (i < 0 || j < 0 || i >= grid.Length || j >= grid.Length || grid[i][j] == '0')
+                return false;
+            grid[i][j] = '0';
+            IsthisIsland(grid, i, j + 1);
+            IsthisIsland(grid, i, j - 1);
+            IsthisIsland(grid, i + 1, j);
+            IsthisIsland(grid, i - 1, j);
+            return true;
+        }
+
+        #endregion
+
+        #region Max Area of islands
+        //Time -O(M x N)
+        //Space  - O(M x N)
+        public int MaxAreaOfIsland(int[][] grid)
+        {
+            var maxArea = 0;
+            for (int i = 0; i < grid.Length; i++)
+            {
+                for (int j = 0; j < grid[i].Length; j++)
+                {
+                    var area = getMaxArea(grid, i, j);
+                    if (area > maxArea)
+                        maxArea = area;
+                }
+            }
+            return maxArea;
+        }
+
+        int getMaxArea(int[][] grid, int i, int j)
+        {
+            if (i < 0 || j < 0 || i >= grid.Length || j >= grid[i].Length || grid[i][j] == 0)
+            {
+                return 0;
+            }
+            grid[i][j] = 0;
+            return 1 + getMaxArea(grid, i, j + 1)
+                     + getMaxArea(grid, i, j - 1)
+                     + getMaxArea(grid, i + 1, j)
+                     + getMaxArea(grid, i - 1, j);
+        } 
+        #endregion
+    }
