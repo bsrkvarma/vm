@@ -1,0 +1,25 @@
+
+    class MaxProfitClass
+    {
+        public int MaxProfit(int[] prices)
+        {
+            //O(N) & O(1)
+            //[7,1,5,3,6,4]
+            //Everyday,I would check the price and will see if its min price than I have, I will consider it as min price, otherwise I will find the max profit.
+            // If I get a stock for minprice, I would buy the stock for minprice otherwise I would check if my profit is Max Profit
+            var maxProfit = 0;
+            var minPrice = prices[0];
+            foreach (var price in prices)
+            {
+                if (price < minPrice)
+                {
+                    minPrice = price;
+                }
+                else
+                {
+                    maxProfit = Math.Max(maxProfit, price - minPrice);
+                }
+            }
+            return maxProfit;
+        }
+    }
