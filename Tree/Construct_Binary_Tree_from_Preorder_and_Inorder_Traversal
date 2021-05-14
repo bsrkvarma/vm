@@ -1,0 +1,30 @@
+   class Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal
+    {
+        static int preorderIndex;
+        static Dictionary<int, int> inorderIndexMap;
+        //TC/SC - O(N)
+        public TreeNode BuildTree(int[] preorder, int[] inorder)
+        {
+            return BuildTreeRecursively(preorder, inorder, 0, preorder.Length - 1);
+        }
+
+        int counter = 0;
+
+        TreeNode BuildTreeRecursively(int[] preorder, int[] inorder, int start, int end)
+        {
+            // if there are no elements to construct the tree
+            if (start > end)
+                return null;
+          
+            // select the preorder_index element as the root and increment it
+            var root = new TreeNode(preorder[counter]);
+            counter++;
+
+            // build left and right subtree
+            // excluding inorderIndexMap[rootValue] element because it's the root
+            var indexInInOrder = Array.IndexOf(inorder, root.val);
+            root.left = BuildTreeRecursively(preorder, inorder, start, indexInInOrder - 1);
+            root.right = BuildTreeRecursively(preorder, inorder, indexInInOrder + 1, end);
+            return root;
+        }
+    }
