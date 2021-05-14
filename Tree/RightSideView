@@ -1,0 +1,75 @@
+ class problem
+    {
+        //O(n) time complexity
+        //O(1) space complexity
+        public static IList<int> RightSideView(TreeNode root)
+        {
+            var res = new List<int>();
+            if (root == null)
+                return res;
+            var currentLevel = new Queue<TreeNode>();
+            var nextLevel = new Queue<TreeNode>();
+            currentLevel.Enqueue(root);
+            while (currentLevel.Count > 0)
+            {
+                TreeNode node = null;
+                if (currentLevel.Count == 1)
+                {
+                    node = currentLevel.Dequeue();
+                    res.Add(node.val);
+                }
+                else
+                {
+                    node = currentLevel.Dequeue();
+                }
+                if (node.left != null)
+                {
+                    nextLevel.Enqueue(node.left);
+                }
+                if (node.right != null)
+                {
+                    nextLevel.Enqueue(node.right);
+                }
+
+                if (currentLevel.Count == 0)
+                {
+                    var temp = nextLevel;
+                    currentLevel = temp;
+                    nextLevel = new Queue<TreeNode>();
+                }
+            }
+            return res;
+        }
+
+        public IList<int> RightSideView2(TreeNode root)
+        {
+            var res = new List<int>();
+            if (root == null)
+                return res;
+            var currentLevel = new Queue<TreeNode>();
+            currentLevel.Enqueue(root);
+            while (currentLevel.Count > 0)
+            {
+                var size = currentLevel.Count;
+                TreeNode node = null;
+                for (int i = 1; i <= size; i++)
+                {
+                    node = currentLevel.Dequeue();
+                    if (i == size)
+                    {
+                        res.Add(node.val);
+                    }
+
+                    if (node.left != null)
+                    {
+                        currentLevel.Enqueue(node.left);
+                    }
+                    if (node.right != null)
+                    {
+                        currentLevel.Enqueue(node.right);
+                    }
+                }
+            }
+            return res;
+        }
+    }
