@@ -1,0 +1,19 @@
+class Kth_Smallest_Element_in_a_BST
+    {
+        //TC/SC- O(N)
+        public int KthSmallest(TreeNode root, int k)
+        {
+            inOrder(root);
+            return res[k - 1];
+        }
+        List<int> res = new List<int>();
+
+        void inOrder(TreeNode node)
+        {
+            if (node == null)
+                return;
+            inOrder(node.left);
+            res.Add(node.val);
+            inOrder(node.right);
+        }
+    }
