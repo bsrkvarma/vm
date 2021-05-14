@@ -1,0 +1,80 @@
+ class IntegerToEnglishWords
+    {
+        public static string NumberToWords(int num)
+        {
+            //Base case, when the input is zero, just return
+            if (num == 0)
+                return "Zero";
+            //Otherwise try to convert the number
+            return Convert(num, false);
+        }
+        
+        static string Convert(int num, bool addSpace = true)
+        {
+            var space = addSpace ? " " : "";
+            if (num == 0)
+                return "";
+            //For numbers >100, loop through the possible scales starting from the largest and try to break down the number to 2 parts
+            //for 1234=> divisible by 1000=> beak it to 12 and 345 and find the value recursively..
+            //this will solve the case above 100's
+            foreach (var item in seriesDict)
+            {
+                if (num / item.Key > 0)
+                {
+                    return $"{Convert(num / item.Key, addSpace)} {item.Value}{Convert(num % item.Key)}";
+                }
+            }
+
+            //For numbers between 100-20, break them to tens part and single digit
+            //and find the word for the tens part and for the 
+            if (num >= 20)
+            {
+                var val = (num / 10) * 10;
+                return num % 10 == 0 ? $"{space}{dict[val]}" : $"{space}{dict[val]} {dict[num % 10]}";
+            }
+
+            //For below 20, get the word directly, as eve number has its own word
+            return $"{space}{dict[num]}";
+        }
+
+        private static Dictionary<int, string> seriesDict = new Dictionary<int, string>()
+        {
+            { 1000000000,"Billion"},
+            { 1000000,"Million"},
+            { 1000,"Thousand"},
+            { 100,"Hundred"}
+        };
+
+        private static Dictionary<int, string> dict = new Dictionary<int, string>
+        {
+            {0,"Zero"},
+            {1,"One"},
+            {2,"Two"},
+            {3,"Three"},
+            {4,"Four"},
+            {5,"Five"},
+            {6,"Six"},
+            {7,"Seven"},
+            {8,"Eight"},
+            {9,"Nine"},
+            {10,"Ten"},
+            {11,"Eleven"},
+            {12,"Twelve"},
+            {13,"Thirteen"},
+            {14,"Fourteen"},
+            {15,"Fifteen"},
+            {16,"Sixteen"},
+            {17,"Seventeen"},
+            {18,"Eighteen"},
+            {19,"Nineteen"},
+            {20,"Twenty" },
+            {30,"Thirty"},
+            {40,"Forty"},
+            {50,"Fifty"},
+            {60,"Sixty"},
+            {70,"Seventy"},
+            {80,"Eighty"},
+            {90,"Ninety"}
+        };
+
+    }
