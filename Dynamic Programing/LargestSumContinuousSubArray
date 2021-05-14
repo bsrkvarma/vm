@@ -1,0 +1,21 @@
+//Finds the sum of the largest contiguous sub array.
+    class LargestSumContinuousSubArray
+    {
+        public static int Test(int[] array)
+        {
+            var max_so_far = array[0];
+            var current_max = array[0];
+            var max_sofar = array[0];
+
+            //-2, -3, 4, -1, -2, 1, 5, -3
+            // 0,  1, 2,  3,  4, 5, 6,  7 => Indexes
+            //-2, -3, 4, -1..
+            //-2, -3, 4,  3.   => Current value or ((i-1) + (Current value)) which ever is higher?
+            for (int i = 1; i < array.Length; i++)
+            {
+                current_max = Math.Max(array[i], current_max + array[i]);
+                max_so_far = Math.Max(max_so_far, current_max);
+            }
+            return max_sofar;
+        }
+    }
