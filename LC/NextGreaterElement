@@ -1,0 +1,26 @@
+class NextGreaterElement
+    {
+        public static int[] GetNextGreaterElement(int[] nums1, int[] nums2)
+        {
+            var hashMap = new Dictionary<int, int>();
+            var stack = new Stack<int>();
+
+            foreach (int num in nums2)
+            {
+                while (stack.Count > 0 && stack.Peek() < num)
+                {
+                    hashMap.Add(stack.Pop(), num);
+                }
+                stack.Push(num);
+            }
+
+            var ans = new int[nums1.Length];
+            for (int i = 0; i < nums1.Length; i++)
+            {
+                var val = -1;
+                if (hashMap.TryGetValue(nums1[i], out val))
+                    ans[i] = val;
+            }
+            return ans;
+        }
+    }
